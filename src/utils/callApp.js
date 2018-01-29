@@ -1,6 +1,6 @@
 function callApp(method, params) {
   var promise = new Promise((resolve, reject) => {
-    window.hbmb.callApp(method, params, (err, result) => {
+    window.HBMBBridge.callApp(method, params, (err, result) => {
       resolve({
         errMsg: err,
         result: result
@@ -10,7 +10,7 @@ function callApp(method, params) {
   return promise;
 }
 function callAppSync(method, params) {
-  var result = window.hbmb.callAppSync(method, params);
+  var result = window.HBMBBridge.callAppSync(method, params);
   return result;
 }
 export { callApp, callAppSync };

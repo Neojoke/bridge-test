@@ -1,7 +1,8 @@
 /**
  * Created by Neo on 2018/1/16.
  */
-HBAPPBRIDGENAME = "bridge";
+HBAPPANDROIDBRIDGENAME = "hb_mb_bridge";
+HBAPPIOSBRIDGENAME = "hb_mb_bridge";
 (function(win) {
   var ua = navigator.userAgent;
   function isAndroid() {
@@ -13,8 +14,13 @@ HBAPPBRIDGENAME = "bridge";
   }
   function checkAppRouterValidity(argument) {
     if (
-      (isAndroid() || isIOS()) &&
-      (typeof win[HBAPPBRIDGENAME] !== "undefined") === true
+      isAndroid() &&
+      (typeof win[HBAPPANDROIDBRIDGENAME] !== "undefined") === true
+    ) {
+      return true;
+    } else if (
+      isIOS() &&
+      (typeof win[HBAPPIOSBRIDGENAME] !== "undefined") === true
     ) {
       return true;
     } else {
@@ -38,7 +44,7 @@ HBAPPBRIDGENAME = "bridge";
         Data: params
       };
       if (isIOS()) {
-        win[HBAPPBRIDGENAME].callRouter(req, function(err, result) {
+        win[HBAPPIOSBRIDGENAME].callRouter(req, function(err, result) {
           var resultObj = null;
           var errorMsg = null;
           if (
@@ -69,7 +75,7 @@ HBAPPBRIDGENAME = "bridge";
           //回调成功之后删除挂载到window上的临时函数
           delete win[cbName];
         };
-        win[HBAPPBRIDGENAME].callRouter(JSON.stringify(req), cbName);
+        win[HBAPPANDROIDBRIDGENAME].callRouter(JSON.stringify(req), cbName);
       }
     },
     callAppSync: function(method, params) {
@@ -81,11 +87,11 @@ HBAPPBRIDGENAME = "bridge";
         Data: params
       };
       if (isIOS()) {
-        var responseJSONObj = win[HBAPPBRIDGENAME].callRouterSync(req);
+        var responseJSONObj = win[HBAPPIOSBRIDGENAME].callRouterSync(req);
         var response = responseJSONObj;
         return response;
       } else if (isAndroid()) {
-        var responseJSONObj = win[HBAPPBRIDGENAME].callRouterSync(
+        var responseJSONObj = win[HBAPPANDROIDBRIDGENAME].callRouterSync(
           JSON.stringify(req)
         );
         var response = JSON.parse(responseJSONObj);
@@ -94,5 +100,5 @@ HBAPPBRIDGENAME = "bridge";
     }
   };
   //将mobile对象挂载到window全局
-  win.hbmb = mobile;
+  win.HBMBBridge = mobile;
 })(window);
